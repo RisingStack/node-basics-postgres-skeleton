@@ -19,7 +19,7 @@ const Product = mongoose.model(MODEL_NAME, productSchema)
  * @returns {Query|Promise.<Product[]>}
  */
 Product.getById = function (id) {
-  return Product.findOne({ _id: id })
+  return Product.findOne({ _id: id }, { __v: false })
 }
 
 module.exports = Product
