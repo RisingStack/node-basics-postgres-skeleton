@@ -1,25 +1,23 @@
 'use strict'
-const mongoose = require('mongoose')
-const connection = require('../connection/mongo')
-const Schema = mongoose.Schema
+const knex = require('./connection')
 
-const MODEL_NAME = 'Product'
+const TABLE_NAME = 'products'
+const Product = {
+  tableName: TABLE_NAME
+}
 
-const productSchema = new Schema({
-  _id: Number,
-  name: String,
-  price: Number
-})
-
-const Product = mongoose.model(MODEL_NAME, productSchema)
+Product.query = function () {
+  return knex(TABLE_NAME)
+}
 
 /**
  *
  * @param {number} id
- * @returns {Query|Promise.<Product[]>}
+ * @returns {knex|Promise.<Product[]>}
  */
 Product.getById = function (id) {
-  return Product.findOne({ _id: id }, { __v: false })
+  return Product.query()
+    .where({ id })
 }
 
 module.exports = Product

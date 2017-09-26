@@ -1,30 +1,30 @@
 'use strict'
-require('../connection/mongo')
-const mongoose = require('mongoose')
+const knex = require('./connection')
 
-const Schema = mongoose.Schema
-const MODEL_NAME = 'user'
+const TABLE_NAME = 'products'
+const User = {
+  tableName: TABLE_NAME
+}
 
-const userSchema = new Schema({
-  username: { type: String, required: true, unique: true }
-})
-
-const User = mongoose.model(MODEL_NAME, userSchema)
+User.query = function () {
+  return knex(TABLE_NAME)
+}
 
 /**
  * Get all users from db
- * @returns {Query|Promise.<User[]>}
+ * @returns {knex|Promise.<User[]>}
  */
 User.getUsers = function () {
-  return User.find()
+  return User.query().find()
 }
 
 /**
  *
- * @param {User} newUser
- * @returns {Query|Promise}
+ * @param {string} username
+ * @returns {knex|Promise}
  */
-User.register = function (newUser) {
-  return new User(newUser).save()
+User.register = function (username) {
+  return User.query().insert(username)
 }
+
 module.exports = User
