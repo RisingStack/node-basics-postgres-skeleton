@@ -6,29 +6,29 @@ const server = require('../server') // make suer you export app from server!!
 const nock = require('nock')
 const expect = require('chai').expect
 
-describe('server', function () {
+describe('server e2e', function () {
   describe('GET /products/:productId', function () {
+    let id
     const testProduct = {
-      _id: 12,
       name: 'test-product',
       price: 999
     }
 
     beforeEach(async function () {
-      await new Product(testProduct).save()
+      [ id ] = await Product.query().insert(testProduct).returning('id')
     })
 
     afterEach(async function () {
-      await Product.findOne(testProduct).remove()
+      await Product.query().del().where({ name: testProduct.name })
     })
 
     it('should return products with comments', async function () {
       const response = await request(server)
-        .get(`/products/${testProduct._id}`)
+        .get(`/products/${id}`)
         .json(true)
         .end()
 
-      delete response.body.comments // ugly hack do not show !!!
+      delete response.body.comments
       expect(response.body).to.deep.equal(testProduct)
     })
 
@@ -37,15 +37,17 @@ describe('server', function () {
       const mockProduct = Object.assign({}, testProduct, { comments: mockComment })
       nock('https://jsonplaceholder.typicode.com')
         .get('/comments')
-        .query({ id: testProduct._id })
+        .query({ id })
         .reply(200, mockComment)
 
       const response = await request(server)
-        .get(`/products/${testProduct._id}`)
+        .get(`/products/${id}`)
         .json(true)
         .end()
 
       expect(response.body).to.deep.equal(mockProduct)
     })
+
+    // add sinon
   })
 })

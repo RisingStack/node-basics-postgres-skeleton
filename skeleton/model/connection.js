@@ -4,6 +4,4 @@ const createKnex = require('knex')
 
 const knex = createKnex(config.db)
 
-module.exports = {
-  db: knex
-}
+module.exports = knex

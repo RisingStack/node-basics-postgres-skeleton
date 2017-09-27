@@ -16,6 +16,7 @@
     "knex": "^0.13.0",
     "lodash": "^4.17.4",
     "pg": "^7.3.0",
+    "pg-connection-string": "^2.0.0",
     "request-promise-native": "^1.0.4"
   },
   "devDependencies": {

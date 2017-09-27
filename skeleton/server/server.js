@@ -49,7 +49,7 @@ app.get('/products/:productId', async function (req, res) {
 
   const comments = JSON.parse(commentsJSONString)
 
-  res.send(Object.assign(product.toObject(), { comments: comments }))
+  res.send(Object.assign(product, { comments: comments }))
 })
 
 app.listen(config.port, function (err) {

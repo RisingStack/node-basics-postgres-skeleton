@@ -18,6 +18,8 @@ Product.query = function () {
 Product.getById = function (id) {
   return Product.query()
     .where({ id })
+    .select('name', 'price')
+    .first()
 }
 
 module.exports = Product

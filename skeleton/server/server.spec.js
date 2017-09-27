@@ -10,7 +10,6 @@ describe('server', function () {
   describe('GET /products/:productId', function () {
 
     const testProduct = {
-      _id: 12,
       name: 'test-product',
       price: 999
     }
@@ -18,11 +17,6 @@ describe('server', function () {
     it('should return products with comments - sinon', async function () {
       const sandbox = sinon.sandbox.create()
       const mockComment = '[ {"foo": "bar", "baz": "bang"} ]'
-      const mockModel = {
-        toObject: function () {
-          return testProduct
-        }
-      }
       const expectedComment = JSON.parse(mockComment)
       // next is not mock anymore !!!
       const expectedProduct = Object.assign({}, testProduct, { comments: expectedComment })
@@ -30,7 +24,7 @@ describe('server', function () {
       const getCommentStub = sandbox.stub(Comment, 'getComments')
         .returns(Promise.resolve(mockComment))
       const getProductStub = sandbox.stub(Product, 'getById')
-        .returns(Promise.resolve(mockModel))
+        .returns(Promise.resolve(testProduct))
 
       const response = await request(server)
         .get(`/products/${testProduct._id}`)
