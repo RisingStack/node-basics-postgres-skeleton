@@ -6,6 +6,7 @@ const schema = joi.object({
 }).unknown().required()
 
 const { error, value } = joi.validate(process.env, schema)
+
 if (error) {
   throw new Error('Config validation error:', error.message)
 }
